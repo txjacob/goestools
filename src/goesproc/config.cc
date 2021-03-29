@@ -5,6 +5,12 @@
 
 #include <util/string.h>
 
+#ifndef CV_VERSION_EPOCH
+#if CV_VERSION_MAJOR >= 4
+#include <opencv2/imgcodecs/legacy/constants_c.h>
+#endif
+#endif
+
 using namespace nlohmann;
 using namespace util;
 
@@ -207,7 +213,7 @@ bool loadHandlers(const toml::Value& v, Config& out) {
       for (const auto& it : trs) {
         auto channel = toUpper(it.first);
         auto path = it.second.get<std::string>("path");
-        auto img = cv::imread(path, cv::IMREAD_UNCHANGED);
+        auto img = cv::imread(path, CV_LOAD_IMAGE_UNCHANGED);
         if (!img.data) {
           out.ok = false;
           out.error = "Unable to load image at: " + path;
